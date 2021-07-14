@@ -1,7 +1,12 @@
-// import Container from './components/Container/Container';
+import React from 'react';
+import Feedback from './components/Feedback';
+// import Statistics from './components/Statistics';
 
 export default function App() {
   return (
-    <div></div>
+    <div>
+      <Feedback />
+      {/* <Statistics /> */}
+    </div>
   );
 }
