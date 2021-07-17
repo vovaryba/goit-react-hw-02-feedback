@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Statistics from './components/Statistics';
 import FeedbackOptions from './components/FeedbackOptions';
 import Section from './components/Section';
+import { options } from './components/data/options';
 
 class App extends Component {
   state = {
@@ -9,47 +10,33 @@ class App extends Component {
     neutral: 0,
     bad: 0,
   };
-  addGoodRev = () => {
+  handleFeedback = ({ target }) => {
+    const { feedback } = target.dataset;
     this.setState(prevState => ({
-      good: prevState.good + 1,
+      [feedback]: prevState[feedback] + 1,
     }));
-  };
-  addNeutralRev = () => {
-    this.setState(prevState => ({
-      neutral: prevState.neutral + 1,
-    }));
-  };
-  addBadRev = () => {
-    this.setState(prevState => ({
-      bad: prevState.bad + 1,
-    }));
-  };
-  countTotalFeedback = () => {
-    const { good } = this.state;
-    const { neutral } = this.state;
-    const { bad } = this.state;
-    return good + neutral + bad;
-  };
-  countPositiveFeedbackPercentage = () => {
-    const { good } = this.state;
-    return Math.round((good / this.countTotalFeedback()) * 100);
   };
 
-  render() {
+  countTotalFeedback = () => {
+    const { good, neutral, bad } = this.state;
+    return good + neutral + bad;
+  };
+
+  countPositiveFeedbackPercentage = () => {
     const { good } = this.state;
-    const { neutral } = this.state;
-    const { bad } = this.state;
+    const total = this.countTotalFeedback();
+    return total ? Math.round((good / total) * 100) : 0;
+  };
+  render() {
+    const { good, neutral, bad } = this.state;
     const total = this.countTotalFeedback();
     const positiveFeedbackPercentage = this.countPositiveFeedbackPercentage();
     return (
       <>
         <Section title="Please leave feedback">
           <FeedbackOptions
-            options={{
-              addGood: this.addGoodRev,
-              addNeutral: this.addNeutralRev,
-              addBad: this.addBadRev,
-            }}
+            options={options}
+            onLeaveFeedback={this.handleFeedback}
           />
         </Section>
         <Section title="Statistics">
